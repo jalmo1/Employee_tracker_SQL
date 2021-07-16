@@ -1,0 +1,27 @@
+{
+  "name": "employee_tracker_sql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "inquirer": "^8.1.2",
+    "mysql2": "^2.2.5",
+    "node": "^16.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jalmo1/Employee_tracker_SQL.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jalmo1/Employee_tracker_SQL/issues"
+  },
+  "homepage": "https://github.com/jalmo1/Employee_tracker_SQL#readme"
+}
