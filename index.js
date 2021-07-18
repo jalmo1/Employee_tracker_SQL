@@ -1,7 +1,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const cTable = require("console.table");
-const Connection = require("mysql2/typings/mysql/lib/Connection");
+// const Connection = require("mysql2/typings/mysql/lib/Connection");
 
 const db = mysql.createConnection({
   host: "localhost",
@@ -45,10 +45,6 @@ function generateQ() {
             value: "updateEmployee",
           },
           {
-            name: "Remove employee",
-            value: "removeEmployee",
-          },
-          {
             name: "Add department",
             value: "addDepartment",
           },
@@ -83,6 +79,14 @@ function generateQ() {
 
         case "updateEmployee":
           updateEmployee();
+          break;
+
+        case "addRole":
+          addRole();
+          break;
+
+        case "addDepartment":
+          addDepartment();
           break;
 
         case "quit":
@@ -171,38 +175,86 @@ function addEmployee() {
     });
 }
 
-async function updateEmployee() {
-  let employees = await connection.query("SELECT * FROM employees");
-  
-  let employeeList = await inquirer.prompt([
-      {
-        type: "list",
-        name: "employeeList",
-        message: "What employee would you like to update?",
-        choices: employees.map((name) => {
-          return {
-            name: name.first_name + "" + name.last_name,
-            value: name.id
-          }
-        })
-      }
-    ])
+function updateEmployee() {
+  let employees = "SELECT * FROM employees";
 
-    let showRoles = await connection.query("SELECT * FROM roles")
-    let roleUpdateList = await inquirer.prompt([
-      {
-        type: "list",
-        name: "role list",
-        message: "What is the new role for this employee?",
-        choices: roles.map((role) => {
-          return {
-            name: role.title,
-            value: role.id
-          }
-        }) 
-      }
-    ])
+  inquirer.prompt([
+    {
+      type: "list",
+      name: "employee",
+      message: "What employee would you like to update?",
+      choices: employees((name) => {
+        return {
+          name: name.first_name + "" + name.last_name,
+          value: name.id,
+        };
+      }),
+    },
+  ]);
+
+  // let showRoles = await connection.query("SELECT * FROM roles");
+  // let roleUpdateList = await inquirer.prompt([
+  //   {
+  //     type: "list",
+  //     name: "role list",
+  //     message: "What is the new role for this employee?",
+  //     choices: showRoles.map((role) => {
+  //       return {
+  //         name: role.title,
+  //         value: role.id,
+  //       };
+  //     }),
+  //   },
+  // ]);
 }
+
+function addRole() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "roleName",
+        message: "What is the name of the new role?",
+      },
+      {
+        type: "input",
+        name: "roleSalary",
+        message: "What is the salary of the new role?",
+      },
+      {
+        type: "input",
+        name: "roleDepartId",
+        message:
+          "What is the new department id? CS=1, Grocery=2, DELI=3, PRODUCE=4:",
+      },
+    ])
+    .then((answers) => {
+      console.log(answers);
+      role_name = answers.roleName;
+      salary = answers.roleSalary;
+      depart_id = answers.roleDepartId;
+
+      let sql = `INSERT INTO roles
+      (title, salary, department_id)
+      VALUES ("${role_name}", ${salary}, ${depart_id});`;
+      db.promise()
+        .query(sql)
+        .then(([rows, fields]) => {
+          console.table(rows);
+
+          generateQ();
+        });
+    });
+}
+
+// function addDepartment() {
+//   inquirer.prompt([
+//     {
+//       type: "input",
+//       name: ""
+//     }
+//   ])
+// }
 
 function quit() {
   db.end();
