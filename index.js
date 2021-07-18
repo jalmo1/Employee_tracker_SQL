@@ -1,6 +1,7 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const cTable = require("console.table");
+const Connection = require("mysql2/typings/mysql/lib/Connection");
 
 const db = mysql.createConnection({
   host: "localhost",
@@ -170,11 +171,38 @@ function addEmployee() {
     });
 }
 
-// function updateEmployee() {
-//   let sql = `UPDATE employees
-//   SET
-//   role_id = "${first_name}";`;
-// }
+async function updateEmployee() {
+  let employees = await connection.query("SELECT * FROM employees");
+  
+  let employeeList = await inquirer.prompt([
+      {
+        type: "list",
+        name: "employeeList",
+        message: "What employee would you like to update?",
+        choices: employees.map((name) => {
+          return {
+            name: name.first_name + "" + name.last_name,
+            value: name.id
+          }
+        })
+      }
+    ])
+
+    let showRoles = await connection.query("SELECT * FROM roles")
+    let roleUpdateList = await inquirer.prompt([
+      {
+        type: "list",
+        name: "role list",
+        message: "What is the new role for this employee?",
+        choices: roles.map((role) => {
+          return {
+            name: role.title,
+            value: role.id
+          }
+        }) 
+      }
+    ])
+}
 
 function quit() {
   db.end();
