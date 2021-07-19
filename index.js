@@ -1,8 +1,8 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 const cTable = require("console.table");
-// const Connection = require("mysql2/typings/mysql/lib/Connection");
 
+//creates connection to database
 const db = mysql.createConnection({
   host: "localhost",
   // Your MySQL username,
@@ -12,11 +12,13 @@ const db = mysql.createConnection({
   database: "employee_tracker",
 });
 
+// starts the initial list of options when app is run
 function init() {
   generateQ();
 }
 init();
 
+//list of options
 function generateQ() {
   inquirer
     .prompt([
@@ -96,6 +98,7 @@ function generateQ() {
     });
 }
 
+// function to see all the current employees
 function viewAllEmployees() {
   const sql = `SELECT *
   FROM employees`;
@@ -266,6 +269,7 @@ function addRole() {
   FROM departments`;
 
   db.query(sql, function (err, results) {
+    // displays the department names instead of the id number
     const departId = [];
     const departArr = [];
     results.forEach((element) => departArr.push(element.name));
