@@ -24,6 +24,6 @@ VALUES
 ('Sara', 'Tossi', 5, NULL),
 ('Filip', 'Tossi', 2, NULL),
 ('Jannie', 'Rosa', 1, NULL),
-('Maddie', 'O,brien', 3, NULL),
+('Maddie', 'Obrien', 3, NULL),
 ('Carona', 'Veerus', 3, NULL);
 
